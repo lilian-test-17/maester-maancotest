@@ -1,0 +1,47 @@
+name: Run Maester 🔥
+
+on:
+  push:
+    branches:
+      - main
+
+  schedule:
+    # Daily at 7:30 UTC, change accordingly
+    - cron: "30 7 * * *"
+
+  # Allows to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Run Maester 🔥
+        id: maester
+        # Set the action version to a specific version, to keep using that exact version.
+        uses: maester365/maester-action@main
+        with:
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+          include_public_tests: true
+          include_private_tests: false
+          include_exchange: false
+          include_teams: false
+          # Set a specific version of the powershell module here or 'latest' or 'preview'
+          # check out https://www.powershellgallery.com/packages/Maester/
+          maester_version: latest
+          disable_telemetry: false
+          step_summary: true
+
+      - name: Write status 📃
+        shell: bash
+        run: |
+          echo "The result of the test run is: ${{ steps.maester.outputs.result }}"
+          echo "Total tests: ${{ steps.maester.outputs.tests_total }}"
+          echo "Passed tests: ${{ steps.maester.outputs.tests_passed }}"
+          echo "Failed tests: ${{ steps.maester.outputs.tests_failed }}"
+          echo "Skipped tests: ${{ steps.maester.outputs.tests_skipped }}"
