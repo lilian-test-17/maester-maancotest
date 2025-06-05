@@ -23,7 +23,7 @@ jobs:
       - name: Run Maester 🔥
         id: maester
         # Set the action version to a specific version, to keep using that exact version.
-        uses: lilian-17/maester-action@main
+        uses: lilian-17/maester@main
         with:
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
