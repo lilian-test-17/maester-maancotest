@@ -23,11 +23,11 @@ jobs:
       - name: Run Maester 🔥
         id: maester
         # Set the action version to a specific version, to keep using that exact version.
-        uses: lilian-17/maester@main
+        uses: lilian-17/maester-action@main
         with:
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
-          include_public_tests: true
+          include_public_tests: false
           include_private_tests: false
           include_exchange: true
           include_teams: false
@@ -36,6 +36,8 @@ jobs:
           maester_version: latest
           disable_telemetry: false
           step_summary: true
+          tests_path: .maester/tests
+
 
       - name: Write status 📃
         shell: bash
