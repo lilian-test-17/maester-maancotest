@@ -28,7 +28,7 @@ jobs:
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           include_public_tests: false
-          include_private_tests: false
+          include_private_tests: true
           include_exchange: true
           include_teams: false
           # Set a specific version of the powershell module here or 'latest' or 'preview'
@@ -36,8 +36,6 @@ jobs:
           maester_version: latest
           disable_telemetry: false
           step_summary: true
-          tests_path: .maester/tests
-
 
       - name: Write status 📃
         shell: bash
