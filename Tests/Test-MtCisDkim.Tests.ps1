@@ -3,7 +3,7 @@
         $test = Test-MtCisDkim
 
         if ($null -ne $test){
-          $test | Should -Be $DKIM SHOULD be enabled for all domains. CIS Microsoft 365 Foundations Benchmark v4.0.0"
+          $test | Should -Be "DKIM SHOULD be enabled for all domains. CIS Microsoft 365 Foundations Benchmark v4.0.0"
           }
         }
       }
