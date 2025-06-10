@@ -36,6 +36,10 @@ jobs:
           maester_version: latest
           disable_telemetry: false
           step_summary: true
+          #Mails
+          mail_recipients: lilian.martpro@gmail.com
+          mail_userid : 1eda5b61-c70e-4421-a631-85318f6c3dbc
+          mail_testresulturi : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Write status 📃
         shell: bash
