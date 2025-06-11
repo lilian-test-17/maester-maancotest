@@ -37,10 +37,8 @@ jobs:
           disable_telemetry: false
           step_summary: true
           #Mails
-          mail_recipients: lilian.martpro@gmail.com
-          mail_userid : 1eda5b61-c70e-4421-a631-85318f6c3dbc
-          mail_testresultsuri : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
+          
       - name: Write status 📃
         shell: bash
         run: |
@@ -49,3 +47,5 @@ jobs:
           echo "Passed tests: ${{ steps.maester.outputs.tests_passed }}"
           echo "Failed tests: ${{ steps.maester.outputs.tests_failed }}"
           echo "Skipped tests: ${{ steps.maester.outputs.tests_skipped }}"
+          $results = Invoke-Maester -Path "Tests" -PassThru
+          Send-MtMail $results -Recipient "lilian.martpro@gmail.com" -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7"
