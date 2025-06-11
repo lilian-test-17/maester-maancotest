@@ -50,7 +50,17 @@ jobs:
 
       - name: Run and Mail Results 📨
         shell: pwsh
-        run: |     
+        run: |
+          # Construire l'URL du run GitHub
           $testResultsUri = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          Send-MtMail -Recipient "lilian.martpro@gmail.com" -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7" -TestResultsUri $testResultsUri
+
+          # Lancer les tests personnalisés dans le dossier "Tests" et récupérer les résultats
+          $results = Invoke-Maester -Path "Tests" -PassThru
+
+          # Envoyer les résultats par mail
+          Send-MtMail -MaesterResults $results `
+                      -Recipient "lilian.martpro@gmail.com" `
+                      -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7" `
+                      -TestResultsUri $testResultsUri
+
 
