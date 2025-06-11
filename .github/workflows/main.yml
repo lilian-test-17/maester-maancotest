@@ -50,8 +50,7 @@ jobs:
 
       - name: Run and Mail Results 📨
         shell: pwsh
-        run: |
-          Connect-Maester -TenantId "${{ secrets.AZURE_TENANT_ID }}" -ClientId "${{ secrets.AZURE_CLIENT_ID }}"
-          $results = Invoke-Maester -Path "Tests" -PassThru
-          Send-MtMail $results -Recipient "lilian.martpro@gmail.com" -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7"
+        run: |     
+          $testResultsUri = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          Send-MtMail $results -Recipient "lilian.martpro@gmail.com" -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7" -TestResultsUri $testResultsUri
 
