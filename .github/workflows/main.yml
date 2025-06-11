@@ -48,4 +48,10 @@ jobs:
           echo "Failed tests: ${{ steps.maester.outputs.tests_failed }}"
           echo "Skipped tests: ${{ steps.maester.outputs.tests_skipped }}"
           $results = Invoke-Maester -Path "Tests" -PassThru
+
+      - name: Run and Mail Results 📨
+        shell: pwsh
+        run: |
+          $results = Invoke-Maester -Path "Tests" -PassThru
           Send-MtMail $results -Recipient "lilian.martpro@gmail.com" -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7"
+
