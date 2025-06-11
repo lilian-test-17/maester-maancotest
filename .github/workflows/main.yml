@@ -52,5 +52,5 @@ jobs:
         shell: pwsh
         run: |     
           $testResultsUri = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          Send-MtMail $results -Recipient "lilian.martpro@gmail.com" -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7" -TestResultsUri $testResultsUri
+          Send-MtMail -Recipient "lilian.martpro@gmail.com" -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7" -TestResultsUri $testResultsUri
 
