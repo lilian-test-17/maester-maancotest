@@ -51,7 +51,8 @@ jobs:
       - name: Run and Mail Results 📨
         shell: pwsh
         run: |
-          Connect-Maester -TenantId "baf0725a-d08a-43a8-822e-4f6a1ded696f"
+          Connect-MgGraph -Scopes
+          Connect-Maester -TenantId "${{ secrets.AZURE_TENANT_ID }}"
           # Construire l'URL du run GitHub
           $testResultsUri = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
