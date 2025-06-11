@@ -47,7 +47,6 @@ jobs:
           echo "Passed tests: ${{ steps.maester.outputs.tests_passed }}"
           echo "Failed tests: ${{ steps.maester.outputs.tests_failed }}"
           echo "Skipped tests: ${{ steps.maester.outputs.tests_skipped }}"
-          $results = Invoke-Maester -Path "Tests" -PassThru
 
       - name: Run and Mail Results 📨
         shell: pwsh
