@@ -51,8 +51,7 @@ jobs:
       - name: Run and Mail Results 📨
         shell: pwsh
         run: |
-          Connect-MgGraph -Scopes (Get-MtGraphScope)
-          Connect-Maester -TenantId "${{ secrets.AZURE_TENANT_ID }}"
+          Connect-Maester -Serivce Graph -TenantId "${{ secrets.AZURE_TENANT_ID }}"
           # Construire l'URL du run GitHub
           $testResultsUri = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
