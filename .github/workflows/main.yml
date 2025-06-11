@@ -51,7 +51,7 @@ jobs:
       - name: Run and Mail Results 📨
         shell: pwsh
         run: |
-          Connect-Maester -TenantId $env:AZURE_TENANT_ID -ClientId $env:AZURE_CLIENT_ID -ClientSecret $env:AZURE_CLIENT_SECRET
+          Connect-Maester -TenantId '$env:AZURE_TENANT_ID' -ClientId '$env:AZURE_CLIENT_ID' -ClientSecret '$env:AZURE_CLIENT_SECRET'
           # Construire l'URL du run GitHub
           $testResultsUri = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
@@ -65,3 +65,4 @@ jobs:
                       -TestResultsUri $testResultsUri
 
 
+ 
