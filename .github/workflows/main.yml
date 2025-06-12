@@ -47,18 +47,18 @@ jobs:
           echo "Passed tests: ${{ steps.maester.outputs.tests_passed }}"
           echo "Failed tests: ${{ steps.maester.outputs.tests_failed }}"
           echo "Skipped tests: ${{ steps.maester.outputs.tests_skipped }}"
-
+# -TenantId ${{ secrets.AZURE_TENANT_ID }} -Service 'Graph'
       - name: Run and Mail Results 📨
         shell: pwsh
         run: |
-          Connect-Maester -TenantId ${{ secrets.AZURE_TENANT_ID }} -Service 'Graph'
-          # Construire l'URL du run GitHub
+          Connect-Maester 
+
           $testResultsUri = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-          # Lancer les tests personnalisés dans le dossier "Tests" et récupérer les résultats
+          
           $results = Invoke-Maester -Path "Tests" -PassThru
 
-          # Envoyer les résultats par mail
+          
           Send-MtMail -MaesterResults $results `
                       -Recipient "lilian.martpro@gmail.com" `
                       -UserId "40f9d246-a922-40f5-bf15-6e686f0711d7" `
