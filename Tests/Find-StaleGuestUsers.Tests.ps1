@@ -21,22 +21,22 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
             if ($guests.Count -eq 0) {
                 $result = "✅ No stale guest users found. All guests accepted or are within the allowed timeframe."
                 Add-MtTestResultDetail -Description $testDescription -Result $result
+
+                # Le test passe ici
                 $true | Should -Be $true
             } else {
-                $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days.`nDetails:`n"
-
-                # Ajouter la liste des utilisateurs concernés au message de résultat
-                foreach ($guest in $guests) {
-                    $guestDetails = @"
-DisplayName: $($guest.DisplayName)
-UserPrincipalName: $($guest.UserPrincipalName)
-ExternalUserState: $($guest.ExternalUserState)
-CreatedDateTime: $($guest.CreatedDateTime)
-"@
-                    $result += $guestDetails + "`n"
-                }
-
+                $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days."
                 Add-MtTestResultDetail -Description $testDescription -Result $result
+
+                # Afficher la liste des utilisateurs concernés
+                Write-Host "Liste des utilisateurs invités concernés :"
+                foreach ($guest in $guests) {
+                    Write-Host "DisplayName: $($guest.DisplayName)"
+                    Write-Host "UserPrincipalName: $($guest.UserPrincipalName)"
+                    Write-Host "ExternalUserState: $($guest.ExternalUserState)"
+                    Write-Host "CreatedDateTime: $($guest.CreatedDateTime)"
+                    Write-Host "----------------------------------------"
+                }
 
                 # Le test échoue ici
                 $guests.Count | Should -Be 0
