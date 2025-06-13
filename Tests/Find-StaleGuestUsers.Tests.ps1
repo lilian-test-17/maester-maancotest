@@ -23,10 +23,9 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
                 Add-MtTestResultDetail -Description $testDescription -Result $result
                 $true | Should -Be $true
             } else {
-                $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days."
-                Add-MtTestResultDetail -Description $testDescription -Result $result
+                $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days.`nDetails:`n"
 
-                # Ajouter la liste des utilisateurs concernés aux résultats du test
+                # Ajouter la liste des utilisateurs concernés au message de résultat
                 foreach ($guest in $guests) {
                     $guestDetails = @"
 DisplayName: $($guest.DisplayName)
@@ -34,8 +33,10 @@ UserPrincipalName: $($guest.UserPrincipalName)
 ExternalUserState: $($guest.ExternalUserState)
 CreatedDateTime: $($guest.CreatedDateTime)
 "@
-                    Add-MtTestResultDetail -Description "Details of stale guest user" -Result $guestDetails
+                    $result += $guestDetails + "`n"
                 }
+
+                Add-MtTestResultDetail -Description $testDescription -Result $result
 
                 # Le test échoue ici
                 $guests.Count | Should -Be 0
