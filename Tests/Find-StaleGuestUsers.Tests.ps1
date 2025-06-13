@@ -7,21 +7,39 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
 
     It "CUS.004: Should return guests who haven't accepted invitation and are older than expiration threshold" {
 
-    try {
-            $policies = Get-MgIdentityConditionalAccessPolicy -All
+   try {
+            $expirationDays = 30
+            $cutoffDate = (Get-Date).AddDays(-$expirationDays)
 
-            $disabledWithoutReason = $policies | Where-Object { $_.State -eq "Disabled" -and $_.DisplayName -notlike "*Disabled:*" }
+            # Appelle la fonction réelle ou simule-la dans un autre fichier
+            $guests = Get-MgUser -Filter "userType eq 'Guest'" -All |
+                Where-Object {
+                    $_.ExternalUserState -ne "Accepted" -and
+                    $_.CreatedDateTime -lt $cutoffDate
+                }
 
-            $testDescription = "Checks if the disabled policies have the reason for being disabled."
-            if ($disabledWithoutReason.Count -gt 0) {
-                $result = "There are $($disabledWithoutReason.Count) disabled policies without a reason for being disabled."
+            $testDescription = "Checks if there are stale guest users (pending > $expirationDays days)."
+
+            if ($guests.Count -gt 0) {
+                $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days."
                 Add-MtTestResultDetail -Description $testDescription -Result $result
+
+                # Pester : le test échoue
+                $guests.Count | Should -Be 0
             } else {
-                Add-MtTestResultDetail -Description $testDescription -Result "Well done. All disabled policies have a reason for being disabled."
+                $result = "✅ No stale guest users found. All guests accepted or are within the allowed timeframe."
+                Add-MtTestResultDetail -Description $testDescription -Result $result
+
+                # Pester : le test passe
+                $true | Should -Be $true
             }
+
         } catch {
-            Write-Error $_.Exception.Message
+            $msg = "❌ Error: $($_.Exception.Message)"
+            Add-MtTestResultDetail -Description "Error while checking guest invitations" -Result $msg
+            Throw $_
         }
+    
 
         $disabledWithoutReason | Should -Be 0
 
