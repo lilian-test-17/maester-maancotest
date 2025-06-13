@@ -28,14 +28,10 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
                 $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days."
                 Add-MtTestResultDetail -Description $testDescription -Result $result
 
-                # Afficher la liste des utilisateurs concernés
-                Write-Host "Liste des utilisateurs invités concernés :"
+                # Ajouter la liste des utilisateurs concernés aux résultats du test
                 foreach ($guest in $guests) {
-                    Write-Host "DisplayName: $($guest.DisplayName)"
-                    Write-Host "UserPrincipalName: $($guest.UserPrincipalName)"
-                    Write-Host "ExternalUserState: $($guest.ExternalUserState)"
-                    Write-Host "CreatedDateTime: $($guest.CreatedDateTime)"
-                    Write-Host "----------------------------------------"
+                    $guestDetails = "DisplayName: $($guest.DisplayName), UserPrincipalName: $($guest.UserPrincipalName), ExternalUserState: $($guest.ExternalUserState), CreatedDateTime: $($guest.CreatedDateTime)"
+                    Add-MtTestResultDetail -Description "Stale Guest User Details" -Result $guestDetails
                 }
 
                 # Le test échoue ici
