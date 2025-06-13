@@ -36,11 +36,10 @@ jobs:
           maester_version: latest
           disable_telemetry: false
           step_summary: true
-          MaialRecipients: "lilian.martpro@gmail.com"
-          MailUser: "40f9d246-a922-40f5-bf15-6e686f0711d7"
-          TestResultsURI: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          mail_recipients: "lilian.martpro@gmail.com"
+          mail_userid: "40f9d246-a922-40f5-bf15-6e686f0711d7"
+          mail_testresultsuri: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-          
       - name: Write status 📃
         shell: bash
         run: |
@@ -49,8 +48,3 @@ jobs:
           echo "Passed tests: ${{ steps.maester.outputs.tests_passed }}"
           echo "Failed tests: ${{ steps.maester.outputs.tests_failed }}"
           echo "Skipped tests: ${{ steps.maester.outputs.tests_skipped }}"
-# -TenantId ${{ secrets.AZURE_TENANT_ID }} -Service 'Graph'
-      
-
-
- 
