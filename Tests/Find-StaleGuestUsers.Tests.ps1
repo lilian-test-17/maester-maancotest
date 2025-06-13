@@ -20,7 +20,8 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
 
             if ($pendingGuests.Count -gt 0) {
                 $list = $pendingGuests | ForEach-Object {
-                    "- $($_.DisplayName) <$($_.UserPrincipalName)> -"
+                    $list = $pendingGuests | ForEach-Object {
+                    "- $($_.DisplayName) <$($_.UserPrincipalName)> - Created: $($_.CreatedDateTime)"
                 } | Out-String
 
                 $result = "❌ Found $($pendingGuests.Count) stale guest(s):`n$list"
