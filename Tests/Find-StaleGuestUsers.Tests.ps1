@@ -71,6 +71,6 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
         $result = Find-StaleGuestUsers -ExpirationDays 30
 
         $result | Should -HaveCount 1
-        $result[0].UserPrincipalName | Should -Be "usera@example.com"
+        $result[0].UserPrincipalName | Should -Be "usera@example.com" -Because "Parce que"
     }
 }
