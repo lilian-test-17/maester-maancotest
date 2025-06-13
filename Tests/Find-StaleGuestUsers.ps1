@@ -5,11 +5,9 @@ function Find-StaleGuestUsers {
 
     $cutoffDate = (Get-Date).AddDays(-$ExpirationDays)
 
-    $pendingGuests = Get-MgUser -Filter "userType eq 'Guest'" -All |
+    return Get-MgUser -Filter "userType eq 'Guest'" -All |
         Where-Object {
             $_.ExternalUserState -ne "Accepted" -and
             $_.CreatedDateTime -lt $cutoffDate
         }
-
-    return $pendingGuests
 }
