@@ -36,9 +36,9 @@ jobs:
           maester_version: latest
           disable_telemetry: false
           step_summary: true
-          mail_recipients: "lilian.martpro@gmail.com"
-          mail_userid: "40f9d246-a922-40f5-bf15-6e686f0711d7"
-          mail_testresultsuri: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          #mail_recipients: "lilian.martpro@gmail.com"
+          #mail_userid: "40f9d246-a922-40f5-bf15-6e686f0711d7"
+          #mail_testresultsuri: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           
       - name: Write status 📃
