@@ -1,48 +1,40 @@
 Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
     BeforeAll {
+        # Assurez-vous que ce fichier contient la fonction Find-StaleGuestUsers si tu l'utilises
         . "$PSScriptRoot\Find-StaleGuestUsers.ps1"
     }
 
-    It "CUS.004: Should return guests who haven't accepted invitation and are older than expiration threshold" {
-        $fakeDate = (Get-Date).AddDays(-31)
+    It "CUS.004: Should fail if guests haven't accepted invitation and are older than expiration threshold" {
+        $expirationDays = 30
+        $cutoffDate = (Get-Date).AddDays(-$expirationDays)
 
-        Mock -CommandName Get-MgUser -MockWith {
-            return @(
-                [pscustomobject]@{
-                    DisplayName = "User A"
-                    UserPrincipalName = "usera@example.com"
-                    ExternalUserState = "PendingAcceptance"
-                    CreatedDateTime = $fakeDate
-                },
-                [pscustomobject]@{
-                    DisplayName = "User B"
-                    UserPrincipalName = "userb@example.com"
-                    ExternalUserState = "Accepted"
-                    CreatedDateTime = $fakeDate
-                },
-                [pscustomobject]@{
-                    DisplayName = "User C"
-                    UserPrincipalName = "userc@example.com"
-                    ExternalUserState = "PendingAcceptance"
-                    CreatedDateTime = (Get-Date) # trop récent
+        try {
+            # Requête réelle à l'API Microsoft Graph
+            $pendingGuests = Get-MgUser -Filter "userType eq 'Guest'" -All |
+                Where-Object {
+                    $_.ExternalUserState -ne "Accepted" -and
+                    $_.CreatedDateTime -lt $cutoffDate
                 }
-            )
-        }
 
-        $guests = Find-StaleGuestUsers -ExpirationDays 30
+            $testDescription = "Checks for stale guest users (invited > $expirationDays days ago and still pending)"
 
-        if ($guests.Count -gt 0) {
-            $guestList = $guests | ForEach-Object {
-                "- $($_.DisplayName) <$($_.UserPrincipalName)> - Created: $($_.CreatedDateTime)"
-            } | Out-String
+            if ($pendingGuests.Count -gt 0) {
+                $list = $pendingGuests | ForEach-Object {
+                    "- $($_.DisplayName) <$($_.UserPrincipalName)> - Created: $($_.CreatedDateTime.ToString("yyyy-MM-dd"))"
+                } | Out-String
 
-            $result = "❌ Found $($guests.Count) stale guest(s):`n$guestList"
-            Add-MtTestResultDetail -Description "Checks if there are stale guest users (pending > 30 days)" -Result $result
+                $result = "❌ Found $($pendingGuests.Count) stale guest(s):`n$list"
+                Add-MtTestResultDetail -Description $testDescription -Result $result
 
-            $guests.Count | Should -Be 0
-        } else {
-            Add-MtTestResultDetail -Description "Checks if there are stale guest users (pending > 30 days)" -Result "✅ No stale guest users found."
-            $true | Should -Be $true
+                $false | Should -Be $true  # Force l’échec
+            } else {
+                Add-MtTestResultDetail -Description $testDescription -Result "✅ No stale guest users found."
+                $true | Should -Be $true
+            }
+        } catch {
+            $msg = "❌ Error: $($_.Exception.Message)"
+            Add-MtTestResultDetail -Description "Error while checking guest invitations" -Result $msg
+            throw $_
         }
     }
 }
