@@ -16,7 +16,6 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
                 }
 
             $testDescription = "Checks if there are stale guest users (pending > $expirationDays days)."
-            $guests.Count | Should -Be 0
             Write-Host "DEBUG: Nombre d'invités stale = $($guests.Count)"
 
             if ($guests.Count -eq 0) {
@@ -28,6 +27,16 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
             } else {
                 $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days."
                 Add-MtTestResultDetail -Description $testDescription -Result $result
+
+                # Afficher la liste des utilisateurs concernés
+                Write-Host "Liste des utilisateurs invités concernés :"
+                foreach ($guest in $guests) {
+                    Write-Host "DisplayName: $($guest.DisplayName)"
+                    Write-Host "UserPrincipalName: $($guest.UserPrincipalName)"
+                    Write-Host "ExternalUserState: $($guest.ExternalUserState)"
+                    Write-Host "CreatedDateTime: $($guest.CreatedDateTime)"
+                    Write-Host "----------------------------------------"
+                }
 
                 # Le test échoue ici
                 $guests.Count | Should -Be 0
