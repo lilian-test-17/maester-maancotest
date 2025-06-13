@@ -1,17 +1,13 @@
-# Requires -Module Pester
-
 Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
     BeforeAll {
         . "$PSScriptRoot\Find-StaleGuestUsers.ps1"
     }
 
     It "CUS.004: Should return guests who haven't accepted invitation and are older than expiration threshold" {
-
-   try {
+        try {
             $expirationDays = 30
             $cutoffDate = (Get-Date).AddDays(-$expirationDays)
 
-            # Appelle la fonction réelle ou simule-la dans un autre fichier
             $guests = Get-MgUser -Filter "userType eq 'Guest'" -All |
                 Where-Object {
                     $_.ExternalUserState -ne "Accepted" -and
@@ -21,16 +17,16 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
             $testDescription = "Checks if there are stale guest users (pending > $expirationDays days)."
 
             if ($guests.Count -gt 0) {
-                $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days."
+                $guestList = $guests | ForEach-Object {
+                    "- $($_.DisplayName) <$($_.UserPrincipalName)> - Created: $($_.CreatedDateTime)"
+                } | Out-String
+
+                $result = "❌ Found $($guests.Count) stale guest(s):`n$guestList"
                 Add-MtTestResultDetail -Description $testDescription -Result $result
 
-                # Pester : le test échoue
-                $guests.Count | Should -Be 0
+                $guests.Count | Should -Be 0  # Le test échouera ici si des guests existent
             } else {
-                $result = "✅ No stale guest users found. All guests accepted or are within the allowed timeframe."
-                Add-MtTestResultDetail -Description $testDescription -Result $result
-
-                # Pester : le test passe
+                Add-MtTestResultDetail -Description $testDescription -Result "✅ No stale guest users found."
                 $true | Should -Be $true
             }
 
@@ -39,6 +35,9 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
             Add-MtTestResultDetail -Description "Error while checking guest invitations" -Result $msg
             Throw $_
         }
+    }
+}
+
     
 
         $disabledWithoutReason | Should -Be 0
