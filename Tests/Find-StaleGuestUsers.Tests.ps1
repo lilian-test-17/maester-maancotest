@@ -17,6 +17,7 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
                 }
 
             $testDescription = "Checks if there are stale guest users (pending > $expirationDays days)."
+            $true | Should -Be $true
 
             if ($guests.Count -gt 0) {
                 $result = "❌ Found $($guests.Count) guest(s) pending for more than $expirationDays days."
@@ -29,7 +30,6 @@ Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
                 Add-MtTestResultDetail -Description $testDescription -Result $result
 
                 # Pester : le test passe
-                $true | Should -Be $true
             }
 
         } catch {
