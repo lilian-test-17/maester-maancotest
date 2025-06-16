@@ -36,7 +36,7 @@ jobs:
           maester_version: latest
           disable_telemetry: false
           step_summary: true
-          mail_recipients: "admin@M365B047519.onmicrosoft.com"
+          mail_recipients: "maester-sender@M365B047519.onmicrosoft.com"
           mail_userid: "1eda5b61-c70e-4421-a631-85318f6c3dbc"
           mail_testresultsuri: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
