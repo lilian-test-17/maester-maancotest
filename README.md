@@ -78,7 +78,7 @@ Sur le repertoire, aller dans l'onglet Action -> Run Maester 🔥 -> Run Workflo
 
 ### Créer l'utilisateur qui enverra les mails 
 
-Créer un utilisateur qui permettra d'envoyer les resultats par mail
+Créer un utilisateur qui permettra d'envoyer les resultats par mail, et de lui attribué une licence
 Noté son ID d'objet et insérer le ligne 40 de .github/workflows/main.yml
 
 #### Si vous n'avez pas le Module ExchangeOnlineManagement installer le :
