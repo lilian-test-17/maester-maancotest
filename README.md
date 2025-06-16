@@ -75,3 +75,44 @@ Sur le repertoire, aller dans l'onglet Action -> Run Maester 🔥 -> Run Workflo
 ---
 
 ## Étape 4 : Configuration alerte mail
+
+### Créer l'utilisateur qui enverra les mails 
+
+Créer un utilisateur qui permettra d'envoyer les resultats par mail
+Noté son ID d'objet et insérer le ligne 40 de .github/workflows/main.yml
+
+#### Si vous n'avez pas le Module ExchangeOnlineManagement installer le :
+
+```powershell
+Install-Module ExchangeOnlineManagement
+```
+
+#### Si vous avez déja le module Exchange :
+
+```powershell
+Import-Module ExchangeOnlineManagement
+
+# Authenticate to Entra and Exchange Online
+Connect-MgGraph -Scopes 'Application.Read.All'
+Connect-ExchangeOnline
+
+#Remplacer 'Maester' par le nom de l'application que vous avez créer
+$entraSP = Get-MgServicePrincipal -Filter "DisplayName eq 'Maester'"
+
+New-ServicePrincipal -AppId $entraSP.AppId -ObjectId $entraSP.Id -DisplayName $entraSP.DisplayName
+
+#Remplacer maesterdemo@contoso.microsoft.com par l'email de l'utilisateur que vous avez créer
+$mailbox = Get-Mailbox maesterdemo@contoso.onmicrosoft.com
+
+New-ManagementScope -Name "rbac_Maester" -RecipientRestrictionFilter "GUID -eq '$($mailbox.GUID)'"
+
+New-ManagementRoleAssignment -App $entraSP.AppId -Role "Application Mail.Send" -CustomResourceScope "rbac_Maester" -Name "Maester Send Mail RBAC"
+
+# Verify access. This should show a line with Mail.Send permission and InScope = True
+Test-ServicePrincipalAuthorization $entraSP.AppId -Resource $mailbox
+
+Write-Host "Use '$($mailbox.ExternalDirectoryObjectId)' when calling Invoke-Maester -MailUserId or Send-MtMail -UserId"
+```
+
+
+
