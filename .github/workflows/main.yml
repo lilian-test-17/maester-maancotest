@@ -37,7 +37,7 @@ jobs:
           disable_telemetry: false
           step_summary: true
           mail_recipients: "lilian.martpro@gmail.com"
-          mail_userid: ${{ secrets.SENDER_ID }}
+          mail_userid: "${{ secrets.SENDER_ID }}"
           mail_testresultsuri: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Write status 📃
