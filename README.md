@@ -174,9 +174,8 @@ Write-Host "Use '$($mailbox.ExternalDirectoryObjectId)' when calling Invoke-Maes
 ## Autres : 
 
 Pour changer le moment d'execution du teste automatique il faut changer le cron a la ligne 10 du main.yml
-Voici un schéma pour comprendre comment ca fonctionne :
 
-
+```
 ┌───────────── minute (0 - 59)
 │ ┌───────────── hour (0 - 23)
 │ │ ┌───────────── day of the month (1 - 31)
@@ -186,4 +185,5 @@ Voici un schéma pour comprendre comment ca fonctionne :
 │ │ │ │ │
 │ │ │ │ │
 * * * * *
+```
 
