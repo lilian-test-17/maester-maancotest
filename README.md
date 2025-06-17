@@ -116,10 +116,12 @@ Cliquez sur New repository secret, puis créez deux secrets avec les noms suivan
 
 Puis cliquez sur Add secret.
 ---
+
 Tester si tout fonctionne
 Dans le dépôt GitHub, allez dans l’onglet Actions
 → Run Maester 🔥
 → Cliquez sur Run workflow
+
 ---
 
 ## Étape 4 : Configuration alerte mail
