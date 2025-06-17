@@ -115,8 +115,8 @@ Cliquez sur New repository secret, puis créez deux secrets avec les noms suivan
 **AZURE_CLIENT_ID** → l’ID de l’application (client ID) que vous avez créée dans Entra
 
 Puis cliquez sur Add secret.
----
 
+---
 Tester si tout fonctionne
 Dans le dépôt GitHub, allez dans l’onglet Actions
 → Run Maester 🔥
