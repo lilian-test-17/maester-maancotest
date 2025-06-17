@@ -1,8 +1,8 @@
-# Documentation : Mettre en place l'outil Maester
+ # Mettre en place l'outil Maester
 
 ## Étape 0 (À faire une fois uniquement)
 
-Fork le REPO suivant : https://github.com/lilian-17/maester-action
+Fork (ou importer) le répertoire  suivant : https://github.com/lilian-17/maester-action
 C'est le repertoire qu'on appellera lors du teste
 
 ## Étape 1 : FORK
@@ -18,30 +18,74 @@ Aller sur la page ENTRA de votre client :
 Puis dans : 
     Applications -> App Registration -> New Registration
 
-### Création de l'app : 
+### Création de l'app :
 
-- Donner lui un nom (ex: Maester App)
-- Ouvrer l'application que vous venez de créer
-- Api Permissions -> Add a Permissions
-- Microsoft Graph -> Applications Permissions
-- Puis cocher les autorisations suivantes :
-  - DeviceManagementConfiguration.Read.All
-  - DeviceManagementManagedDevices.Read.All
-  - Directory.Read.All
-  - DirectoryRecommendations.Read.All
-  - IdentityRiskEvent.Read.All
-  - Policy.Read.All
-  - Policy.Read.ConditionalAccess
-  - PrivilegedAccess.Read.AzureAD
-  - Reports.Read.All
-  - RoleEligibilitySchedule.Read.Directory
-  - RoleEligibilitySchedule.ReadWrite.Directory
-  - RoleManagement.Read.All
-  - SharePointTenantSettings.Read.All
-  - UserAuthenticationMethod.Read.All
-- Add permissions
-- Grant admin consent for [le client
-- Yes pour confirmer
+
+```powershell
+#Installation de Microsoft.Graph
+Install-Module Microsoft.Graph -Scope CurrentUser
+
+# Connexion (si ce n'est pas déjà fait)
+Connect-MgGraph -Scopes "Application.ReadWrite.All", "AppRoleAssignment.ReadWrite.All", "Directory.ReadWrite.All"
+
+# Paramètres
+$appName = "Maester App"
+$graphAppId = "00000003-0000-0000-c000-000000000000"       # Microsoft Graph
+$exchangeAppId = "00000002-0000-0ff1-ce00-000000000000"    # Exchange Online
+
+$graphPermissions = @(
+    "DeviceManagementConfiguration.Read.All",
+    "DeviceManagementManagedDevices.Read.All",
+    "Directory.Read.All",
+    "DirectoryRecommendations.Read.All",
+    "IdentityRiskEvent.Read.All",
+    "Policy.Read.All",
+    "Policy.Read.ConditionalAccess",
+    "PrivilegedAccess.Read.AzureAD",
+    "Reports.Read.All",
+    "RoleEligibilitySchedule.Read.Directory",
+    "RoleEligibilitySchedule.ReadWrite.Directory",
+    "RoleManagement.Read.All",
+    "SharePointTenantSettings.Read.All",
+    "UserAuthenticationMethod.Read.All"
+)
+
+$exchangePermissions = @("Exchange.ManageAsApp")
+
+# Création de l'application
+$app = New-MgApplication -DisplayName $appName -RequiredResourceAccess @()
+
+# Création de l'enregistrement de l'application (service principal)
+$sp = New-MgServicePrincipal -AppId $app.AppId
+
+# Microsoft Graph : récupération du service principal
+$graphSP = Get-MgServicePrincipal -Filter "AppId eq '$graphAppId'"
+$graphRoles = $graphSP.AppRoles | Where-Object { $_.Value -in $graphPermissions }
+
+# Attribution des rôles Microsoft Graph
+foreach ($role in $graphRoles) {
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id `
+        -PrincipalId $sp.Id `
+        -ResourceId $graphSP.Id `
+        -AppRoleId $role.Id
+}
+
+# Exchange Online : récupération du service principal
+$exchangeSP = Get-MgServicePrincipal -Filter "AppId eq '$exchangeAppId'"
+$exchangeRoles = $exchangeSP.AppRoles | Where-Object { $_.Value -in $exchangePermissions }
+
+# Attribution des rôles Exchange Online
+foreach ($role in $exchangeRoles) {
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id `
+        -PrincipalId $sp.Id `
+        -ResourceId $exchangeSP.Id `
+        -AppRoleId $role.Id
+}
+
+# Résultat
+Write-Host "`n✅ Application '$appName' créée avec toutes les permissions requises (Graph + Exchange)." -ForegroundColor Green
+Write-Host "❗ N'oubliez pas d'effectuer le 'Grant admin consent' dans Azure Portal." -ForegroundColor Yellow
+```
 
 ### Ajouts des secrets 
 
@@ -114,5 +158,21 @@ Test-ServicePrincipalAuthorization $entraSP.AppId -Resource $mailbox
 Write-Host "Use '$($mailbox.ExternalDirectoryObjectId)' when calling Invoke-Maester -MailUserId or Send-MtMail -UserId"
 ```
 
+---
 
+## Autres : 
+
+Pour changer le moment d'execution du teste automatique il faut changer le cron a la ligne 10 du main.yml
+Voici un schéma pour comprendre comment ca fonctionne :
+
+
+┌───────────── minute (0 - 59)
+│ ┌───────────── hour (0 - 23)
+│ │ ┌───────────── day of the month (1 - 31)
+│ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+│ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+│ │ │ │ │
+│ │ │ │ │
+│ │ │ │ │
+* * * * *
 
