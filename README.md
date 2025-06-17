@@ -2,24 +2,24 @@
 
 ## Étape 0 (À faire une fois uniquement)
 
-Fork (ou importer) le répertoire  suivant : https://github.com/lilian-17/maester-action
-C'est le repertoire qu'on appellera lors du teste
+Forkez (ou importez) le répertoire suivant :
+https://github.com/lilian-17/maester-action
+C’est le répertoire qui sera appelé lors des tests.
 
 ## Étape 1 : FORK
 
-Fork le REPO suivant : https://github.com/lilian-17/maester-contoso puis remplacer contoso par le nom du client
-Il faut un répertoire par client
+Forkez le dépôt suivant :
+https://github.com/lilian-17/maester-contoso
+puis **remplacez contoso par le nom du client.**
+Il faut un répertoire par client.
 
-Puis a la ligne 26 du fichier .github/workflows/main.yml remplacer "lilian-17" par le username de votre compte GitHub
+Ensuite, à la ligne 26 du fichier .github/workflows/main.yml, remplacez **"lilian-17"** par le nom d’utilisateur de votre compte GitHub.
 
 ## Étape 2 : Configuration de l'application
 
-Aller sur la page ENTRA de votre client : 
-Puis dans : 
-    Applications -> App Registration -> New Registration
-
 ### Création de l'app :
 
+Exécuter le script suivant pour créer l'application
 
 ```powershell
 #Installation de Microsoft.Graph
@@ -88,42 +88,51 @@ Write-Host "❗ N'oubliez pas d'effectuer le 'Grant admin consent' dans Azure Po
 ```
 
 ### Ajouts des secrets 
+Toujours sur l’application créée :
+→ Certificates & secrets
+→ Federated credentials → Add credential
+→ Pour le scénario Federated credential scenario, choisissez GitHub Actions deploying Azure resources
 
-Toujours sur l'application crée 
--> Certifacetes & Secrets
--> Federated Credentials -> Add Credential
--> Pour Federated credential scenario choisisser GitHub Actions deploying Azure resources
-Puis remplisser les différents champs :
-- Organization : Username GitHub
-- Repository: Le REPO GitHub créer précédemment
-- Entity Type : Branch
-- GitHub branch name : main
-- Credential Details -> Name : Ce que vous voulez
+Puis remplissez les différents champs :
+
+Organization : nom d’utilisateur GitHub
+
+Repository : le dépôt GitHub créé précédemment
+
+Entity Type : Branch
+
+GitHub branch name : main
+
+Credential details → Name : ce que vous voulez
 
 ## Étape 3 : Ajouts des infos du tenant au repo GitHub
+Ouvrez le dépôt GitHub et allez dans Settings
+→ Security → Secrets and variables → Actions
+Cliquez sur New repository secret, puis créez deux secrets avec les noms suivants :
 
+**AZURE_TENANT_ID** → l’ID du tenant (Directory ID) de votre tenant Entra
 
-Ouvrer le repo GitHub et aller dans les settings
-Security -> Secrets and variables -> Actions
-Cliquer sur New Repository Secret
-Puis créer 2 variable au nom de :
-- AZURE_TENANT_ID -> The Directory (tenant) ID of the Entra tenant
-- AZURE_CLIENT_ID -> The Application (client) ID of the Entra application you created
-Puis Add Secret
+**AZURE_CLIENT_ID** → l’ID de l’application (client ID) que vous avez créée dans Entra
 
+Puis cliquez sur Add secret.
 ---
-
-Pour Tester si ca fonctionne ->
-Sur le repertoire, aller dans l'onglet Action -> Run Maester 🔥 -> Run Workflow
-
+Tester si tout fonctionne
+Dans le dépôt GitHub, allez dans l’onglet Actions
+→ Run Maester 🔥
+→ Cliquez sur Run workflow
 ---
 
 ## Étape 4 : Configuration alerte mail
 
 ### Créer l'utilisateur qui enverra les mails 
 
-Créer un utilisateur qui permettra d'envoyer les resultats par mail, et de lui attribué une licence
-Noté son ID d'objet et insérer le ligne 40 de .github/workflows/main.yml
+Créez un utilisateur dédié à l’envoi des résultats par e-mail (par exemple via le portail Azure ou PowerShell).
+
+Attribuez-lui une licence compatible avec l’envoi d’e-mails (Exchange Online par exemple).
+
+Notez son ID d’objet (Object ID).
+
+Insérez cet ID à la ligne 40 du fichier .github/workflows/main.yml.
 
 #### Si vous n'avez pas le Module ExchangeOnlineManagement installer le :
 
