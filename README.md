@@ -21,9 +21,14 @@ Ensuite, à la ligne 26 du fichier .github/workflows/main.yml, remplacez **"lili
 
 Exécuter le script suivant pour créer l'application
 
+Si vous n'avez pas le module Microsoft Graph : 
 ```powershell
 #Installation de Microsoft.Graph
 Install-Module Microsoft.Graph -Scope CurrentUser
+```
+Sinon :
+
+```powershell
 
 # Connexion (si ce n'est pas déjà fait)
 Connect-MgGraph -Scopes "Application.ReadWrite.All", "AppRoleAssignment.ReadWrite.All", "Directory.ReadWrite.All"
@@ -47,6 +52,7 @@ $graphPermissions = @(
     "RoleEligibilitySchedule.ReadWrite.Directory",
     "RoleManagement.Read.All",
     "SharePointTenantSettings.Read.All",
+    "User.Read",
     "UserAuthenticationMethod.Read.All"
 )
 
@@ -86,6 +92,8 @@ foreach ($role in $exchangeRoles) {
 Write-Host "`n✅ Application '$appName' créée avec toutes les permissions requises (Graph + Exchange)." -ForegroundColor Green
 Write-Host "❗ N'oubliez pas d'effectuer le 'Grant admin consent' dans Azure Portal." -ForegroundColor Yellow
 ```
+
+
 
 ### Ajouts des secrets 
 Toujours sur l’application créée :
