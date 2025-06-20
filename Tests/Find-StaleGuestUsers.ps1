@@ -10,4 +10,6 @@ function Find-StaleGuestUsers {
             $_.ExternalUserState -ne "Accepted" -and
             $_.CreatedDateTime -lt $cutoffDate
         }
+    @{
+    Severity = "Informational"}
 }
