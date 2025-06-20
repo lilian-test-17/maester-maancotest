@@ -93,7 +93,7 @@ Write-Host "`n✅ Application '$appName' créée avec toutes les permissions req
 Write-Host "❗ N'oubliez pas d'effectuer le 'Grant admin consent' dans Azure Portal." -ForegroundColor Yellow
 ```
 
-Puis aller accepter les authorisations 
+Puis aller **accepter les authorisations**
 Et executer ce script : 
 
 ```powershell
