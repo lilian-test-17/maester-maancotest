@@ -1,4 +1,4 @@
-Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" {
+Describe "Find-StaleGuestUsers" -Tag "Custom", "Users" -Severity "Low" {
     BeforeAll {
         . "$PSScriptRoot\Find-StaleGuestUsers.ps1"
     }
