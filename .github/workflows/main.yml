@@ -20,7 +20,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Run Maanco Tests ☁️
+      - name: Run Maester 🔥
         id: maester
         # Set the action version to a specific version, to keep using that exact version.
         uses: support-maanco/maester-action@main
