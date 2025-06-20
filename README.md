@@ -97,6 +97,7 @@ Puis aller accepter les authorisations
 Et executer ce script : 
 
 ```powershell
+Connect-ExchgangeOnline
 --- Étapes spécifiques RBAC Exchange Online ---
 Création du service principal côté Exchange (sinon, les attributions RBAC échouent)
 New-ServicePrincipal -AppId $app.AppId -ObjectId $sp.Id -DisplayName $app.DisplayName
