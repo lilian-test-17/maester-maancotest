@@ -93,6 +93,18 @@ Write-Host "`n✅ Application '$appName' créée avec toutes les permissions req
 Write-Host "❗ N'oubliez pas d'effectuer le 'Grant admin consent' dans Azure Portal." -ForegroundColor Yellow
 ```
 
+Puis aller accepter les authorisations 
+Et executer ce script : 
+
+```powershell
+--- Étapes spécifiques RBAC Exchange Online ---
+Création du service principal côté Exchange (sinon, les attributions RBAC échouent)
+New-ServicePrincipal -AppId $app.AppId -ObjectId $sp.Id -DisplayName $app.DisplayName
+
+Attribution d’un rôle minimal (View-Only Configuration, pour la lecture)
+New-ManagementRoleAssignment -Role "View-Only Configuration" -App $app.DisplayName
+```
+
 
 
 ### Ajouts des secrets 
@@ -123,14 +135,6 @@ Cliquez sur New repository secret, puis créez deux secrets avec les noms suivan
 **AZURE_CLIENT_ID** → l’ID de l’application (client ID) que vous avez créée dans Entra
 
 Puis cliquez sur Add secret.
-
----
-Tester si tout fonctionne
-Dans le dépôt GitHub, allez dans l’onglet Actions
-→ Run Maester 🔥
-→ Cliquez sur Run workflow
-
----
 
 ## Étape 4 : Configuration alerte mail
 
@@ -178,6 +182,13 @@ Write-Host "Use '$($mailbox.ExternalDirectoryObjectId)' when calling Invoke-Maes
 ```
 
 ---
+Tester si tout fonctionne
+Dans le dépôt GitHub, allez dans l’onglet Actions
+→ Run Maester 🔥
+→ Cliquez sur Run workflow
+
+---
+
 
 ## Autres : 
 
