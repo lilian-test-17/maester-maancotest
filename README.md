@@ -98,11 +98,11 @@ Et executer ce script :
 
 ```powershell
 Connect-ExchgangeOnline
---- Étapes spécifiques RBAC Exchange Online ---
-Création du service principal côté Exchange (sinon, les attributions RBAC échouent)
+#--- Étapes spécifiques RBAC Exchange Online ---
+#Création du service principal côté Exchange (sinon, les attributions RBAC échouent)
 New-ServicePrincipal -AppId $app.AppId -ObjectId $sp.Id -DisplayName $app.DisplayName
 
-Attribution d’un rôle minimal (View-Only Configuration, pour la lecture)
+#Attribution d’un rôle minimal (View-Only Configuration, pour la lecture)
 New-ManagementRoleAssignment -Role "View-Only Configuration" -App $app.DisplayName
 ```
 
@@ -165,7 +165,7 @@ Connect-MgGraph -Scopes 'Application.Read.All'
 Connect-ExchangeOnline
 
 #Remplacer 'Maester' par le nom de l'application que vous avez créer
-$entraSP = Get-MgServicePrincipal -Filter "DisplayName eq 'Maester'"
+$entraSP = Get-MgServicePrincipal -Filter "DisplayName eq 'Maester App'"
 
 New-ServicePrincipal -AppId $entraSP.AppId -ObjectId $entraSP.Id -DisplayName $entraSP.DisplayName
 
