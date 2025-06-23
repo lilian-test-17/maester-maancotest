@@ -36,7 +36,7 @@ jobs:
           maester_version: latest
           disable_telemetry: false
           step_summary: true
-          mail_recipients: "lilian.martpro@gmail.com"
+          mail_recipients: "LilianMartineau@MaancoTest.onmicrosoft.com"
           mail_userid: "3471dcb0-3122-4d12-a668-010473f014d4"
           mail_testresultsuri: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
