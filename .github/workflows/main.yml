@@ -23,7 +23,7 @@ jobs:
       - name: Run Maester 🔥
         id: maester
         # Set the action version to a specific version, to keep using that exact version.
-        uses: support-maanco/maester-action@main
+        uses: lilian-test-17/maester-action@main
         with:
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -36,8 +36,8 @@ jobs:
           maester_version: latest
           disable_telemetry: false
           step_summary: true
-          mail_recipients: "support@maanco.fr"
-          mail_userid: "iduser"
+          mail_recipients: "lilian.martpro@gmail.com"
+          mail_userid: "3471dcb0-3122-4d12-a668-010473f014d4"
           mail_testresultsuri: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Write status 📃
