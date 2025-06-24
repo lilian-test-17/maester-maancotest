@@ -13,7 +13,7 @@ https://github.com/lilian-17/maester-contoso
 puis **remplacez contoso par le nom du client.**
 Il faut un répertoire par client.
 
-Ensuite, à la ligne 26 du fichier .github/workflows/main.yml, remplacez **"lilian-17"** par le nom d’utilisateur de votre compte GitHub.
+Ensuite, à la ligne 26 du fichier .github/workflows/main.yml, remplacez **"lilian-17"** par le nom d’utilisateur de votre compte GitHub. Mais sans commit, faites le **seulement à la fin**
 
 ## Étape 2 : Configuration de l'application
 
@@ -98,11 +98,11 @@ Et executer ce script :
 
 ```powershell
 Connect-ExchgangeOnline
---- Étapes spécifiques RBAC Exchange Online ---
-Création du service principal côté Exchange (sinon, les attributions RBAC échouent)
+#--- Étapes spécifiques RBAC Exchange Online ---
+#Création du service principal côté Exchange (sinon, les attributions RBAC échouent)
 New-ServicePrincipal -AppId $app.AppId -ObjectId $sp.Id -DisplayName $app.DisplayName
 
-Attribution d’un rôle minimal (View-Only Configuration, pour la lecture)
+#Attribution d’un rôle minimal (View-Only Configuration, pour la lecture)
 New-ManagementRoleAssignment -Role "View-Only Configuration" -App $app.DisplayName
 ```
 
@@ -148,6 +148,7 @@ Attribuez-lui une licence compatible avec l’envoi d’e-mails (Exchange Online
 Notez son ID d’objet (Object ID).
 
 Insérez cet ID à la ligne 40 du fichier .github/workflows/main.yml.
+Et à la ligne 39, saisisser l'e-mail de celui qui doit recevoir les tests
 
 #### Si vous n'avez pas le Module ExchangeOnlineManagement installer le :
 
@@ -165,7 +166,7 @@ Connect-MgGraph -Scopes 'Application.Read.All'
 Connect-ExchangeOnline
 
 #Remplacer 'Maester' par le nom de l'application que vous avez créer
-$entraSP = Get-MgServicePrincipal -Filter "DisplayName eq 'Maester'"
+$entraSP = Get-MgServicePrincipal -Filter "DisplayName eq 'Maester App'"
 
 New-ServicePrincipal -AppId $entraSP.AppId -ObjectId $entraSP.Id -DisplayName $entraSP.DisplayName
 
