@@ -182,6 +182,7 @@ Test-ServicePrincipalAuthorization $entraSP.AppId -Resource $mailbox
 
 Write-Host "Use '$($mailbox.ExternalDirectoryObjectId)' when calling Invoke-Maester -MailUserId or Send-MtMail -UserId"
 ```
+Ensuite il va falloir faire en sorte que les mails soit bien envoyés, car ils peuvent être bloqué en raison de suspicion de spam
 
 ---
 Tester si tout fonctionne
@@ -208,4 +209,20 @@ Pour comprendre comment ca fonctionne, voici un schéma.
 │ │ │ │ │
 * * * * *
 ```
+
+## Comment supprimer toute trace de l'application ?
+
+### Supprimer dans Entra
+
+Application > Inscriptions d'applications > Maester App > Supprimer application
+
+### Puis supprimer le service principal
+
+```powershell
+Connect-ExchangeOnline
+Get-ServicePrincipal
+Remove-ServicePrincipal "Maester App" #Ou autre nom donner au service
+```
+
+
 
