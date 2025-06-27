@@ -224,5 +224,16 @@ Get-ServicePrincipal
 Remove-ServicePrincipal "Maester App" #Ou autre nom donner au service
 ```
 
+## Comment synchroniser GitHub
+
+Si vous faites des changements sur le repo principal et que vous voulez aller le synchroniser sur les autres repo faites ceci :
+- Aller sur le repo que vous voulez synchroniser 
+
+## Erreurs Possible : 
+
+### L'email ne s'envoie pas en raison de suspicion de spam
+
+Si votre tenant est trop récent et est donc encore en période d'essaie(?) et bien les envoies de mail ne seront pas encore autorisé
+
 
 
