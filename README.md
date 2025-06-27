@@ -182,6 +182,7 @@ Test-ServicePrincipalAuthorization $entraSP.AppId -Resource $mailbox
 
 Write-Host "Use '$($mailbox.ExternalDirectoryObjectId)' when calling Invoke-Maester -MailUserId or Send-MtMail -UserId"
 ```
+Ensuite il va falloir faire en sorte que les mails soit bien envoyés, car ils peuvent être bloqué en raison de suspicion de spam
 
 ---
 Tester si tout fonctionne
@@ -208,4 +209,31 @@ Pour comprendre comment ca fonctionne, voici un schéma.
 │ │ │ │ │
 * * * * *
 ```
+
+## Comment supprimer toute trace de l'application ?
+
+### Supprimer dans Entra
+
+Application > Inscriptions d'applications > Maester App > Supprimer application
+
+### Puis supprimer le service principal
+
+```powershell
+Connect-ExchangeOnline
+Get-ServicePrincipal
+Remove-ServicePrincipal "Maester App" #Ou autre nom donner au service
+```
+
+## Comment synchroniser GitHub
+
+Si vous faites des changements sur le repo principal et que vous voulez aller le synchroniser sur les autres repo faites ceci :
+- Aller sur le repo que vous voulez synchroniser 
+
+## Erreurs Possible : 
+
+### L'email ne s'envoie pas en raison de suspicion de spam
+
+Si votre tenant est trop récent et est donc encore en période d'essaie(?) et bien les envoies de mail ne seront pas encore autorisé
+
+
 
